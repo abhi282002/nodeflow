@@ -28,6 +28,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -48,7 +49,21 @@ export function LoginForm() {
   });
 
   const onSubmit = async (value: LoginFormValues) => {
-    console.log(value);
+    await authClient.signIn.email(
+      {
+        email: value.email,
+        password: value.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;

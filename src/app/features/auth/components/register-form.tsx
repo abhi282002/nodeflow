@@ -30,6 +30,8 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
+
+
 const RegisterSchema = z
   .object({
     email: z.email("Please enter a valid email address"),
@@ -128,7 +130,7 @@ export function RegisterForm() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
                             type="Password"
