@@ -2,16 +2,27 @@ import { z } from "zod";
 
 import {baseProcedure, createTRPCRouter, protectedProcedure} from "../init";
 import prisma from "@/lib/db";
+import {inngest} from "@/inngest/client";
 
 export const appRouter = createTRPCRouter({
-  getUsers: protectedProcedure
+  testAi:baseProcedure.mutation(async ()=>{
+       await inngest.send({
+           name:"execute/ai"
+       })
+      return { success: true , message:"Job queued successfully." };
+  }),
+  getWorkflows: protectedProcedure
     .query(({ctx})=>{
-        return prisma.user.findUnique({
-            where:{
-                id:ctx.auth.user.id
-            }
-        })
-    })
+        return prisma.workflow.findMany()
+    }),
+  createWorkflows:protectedProcedure.mutation(()=>{
+      return prisma.workflow.create({
+          data:{
+              name:"test-workflow"
+          }
+      })
+  })
+
 });
 
 export type AppRouter = typeof appRouter;
