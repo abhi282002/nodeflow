@@ -30,7 +30,7 @@ const menuItems = [
             }, {
                 title: "Executions",
                 icon: HistoryIcon,
-                url: "/executions"
+                url: "/execution"
             }
         ]
     }
