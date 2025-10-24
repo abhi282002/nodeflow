@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import {usePathname, useRouter} from "next/navigation";
 import {authClient} from "@/lib/auth-client";
+import {useHasActiveSubscription} from "../app/features/payment/hooks/use-payment";
 
 const menuItems = [
     {
@@ -39,6 +40,9 @@ const menuItems = [
 export const AppSidebar = () => {
     const router = useRouter()
     const pathname = usePathname()
+
+
+    const {hasActiveSubscription, isLoading} = useHasActiveSubscription()
 
     return <Sidebar collapsible={"icon"}>
         <SidebarHeader>
@@ -79,17 +83,22 @@ export const AppSidebar = () => {
             </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
+            {!hasActiveSubscription && !isLoading && (
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={() => authClient.checkout({
+                            slug: "nodebase pro"
+                        })} className={"gap-x-4 h-10 px-4"} tooltip={"Upgrade to Pro"}>
+                            <StarIcon className={"h-4 w-4"}/>
+                            <span>Upgrade to Pro</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            )}
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton className={"gap-x-4 h-10 px-4"} tooltip={"Upgrade to Pro"}>
-                        <StarIcon className={"h-4 w-4"}/>
-                        <span>Upgrade to Pro</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton className={"gap-x-4 h-10 px-4"} tooltip={"Billing Portal"}>
+                    <SidebarMenuButton onClick={() => authClient.customer.portal()} className={"gap-x-4 h-10 px-4"}
+                                       tooltip={"Billing Portal"}>
                         <CreditCardIcon className={"h-4 w-4"}/>
                         <span>Billing Portal</span>
                     </SidebarMenuButton>
