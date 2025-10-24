@@ -27,7 +27,6 @@ export const protectedProcedure = baseProcedure.use(async ({ctx, next}) => {
             message: "Unauthorized"
         })
     }
-
     return next({
         ctx: {
             ...ctx,
@@ -49,10 +48,6 @@ export const premiumProcedure = protectedProcedure.use(
                 message: "Active subscription required"
             })
         }
-
-
         return next({ctx: {...ctx, customer}})
-
-
     }
 )
