@@ -1,27 +1,28 @@
-import { z } from "zod";
-
-import {baseProcedure, createTRPCRouter, protectedProcedure} from "../init";
+import {baseProcedure, createTRPCRouter} from "../init";
 import prisma from "@/lib/db";
 import {inngest} from "@/inngest/client";
 
 export const appRouter = createTRPCRouter({
-  testAi:baseProcedure.mutation(async ()=>{
-       await inngest.send({
-           name:"execute/ai"
-       })
-      return { success: true , message:"Job queued successfully." };
-  }),
-  getWorkflows: protectedProcedure
-    .query(({ctx})=>{
-        return prisma.workflow.findMany()
+    testAi: baseProcedure.mutation(async () => {
+        await inngest.send({
+            name: "execute/ai"
+        })
+        return {success: true, message: "Job queued successfully."};
     }),
-  createWorkflows:protectedProcedure.mutation(()=>{
-      return prisma.workflow.create({
-          data:{
-              name:"test-workflow"
-          }
-      })
-  })
+
+    getWorkflows: baseProcedure.query(({ctx}) => {
+        return prisma.workflow.findMany()
+
+    }),
+
+    createWorkflows: baseProcedure.mutation(() => {
+        return prisma.workflow.create({
+            data: {
+                name: "test-workflow"
+
+            }
+        })
+    })
 
 });
 
