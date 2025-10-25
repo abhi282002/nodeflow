@@ -1,34 +1,35 @@
-import {useTRPC} from "@/trpc/client";
-import {useMutation, useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
+import { useTRPC } from '@/trpc/client';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useWorkflowParams } from './use-workflow-params';
 
 export const useSuspenseWorkflows = () => {
-    const trpc = useTRPC()
+  const trpc = useTRPC();
 
-    return useSuspenseQuery(trpc.workflows.getMany.queryOptions())
-}
+  const [params] = useWorkflowParams();
 
+  return useSuspenseQuery(trpc.workflows.getMany.queryOptions(params));
+};
 
 //Hook to create a new workflow
 
-
 export const useCreateWorkflow = () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
-    const queryClient = useQueryClient()
-    const trpc = useTRPC()
-
-
-    return useMutation(trpc.workflows.create.mutationOptions({
-        onSuccess: (data) => {
-            toast.success(`Workflow ${data.name} created successfully.`)
-            queryClient.invalidateQueries(
-                trpc.workflows.getMany.queryOptions()
-            )
-        },
-        onError: (error) => {
-            toast.error("Error creating workflow")
-        }
-    }))
-
-}
+  return useMutation(
+    trpc.workflows.create.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow ${data.name} created successfully.`);
+        queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions({}));
+      },
+      onError: (error) => {
+        toast.error('Error creating workflow');
+      },
+    }),
+  );
+};

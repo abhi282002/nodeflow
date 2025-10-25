@@ -1,29 +1,39 @@
-import {Suspense} from "react";
+import {
+  WorkflowContainer,
+  WorkflowsList,
+} from '@/app/features/workflows/components/workflow';
+import { workflowParamsLoader } from '@/app/features/workflows/server/params-loader';
+import { prefetchWorkflows } from '@/app/features/workflows/server/prefetch';
+import { requireAuth } from '@/lib/auth-utils';
+import { HydrateClient } from '@/trpc/server';
+import { Suspense } from 'react';
 
+import { ErrorBoundary } from 'react-error-boundary';
 
-import {requireAuth} from "@/lib/auth-utils";
-import {prefetchWorkflows} from "@/app/features/workflows/server/prefetch";
-import {HydrateClient} from "@/trpc/server";
-import {WorkflowContainer, WorkflowsList} from "@/app/features/workflows/components/workflow";
+type Props = {
+  searchParams: Promise<{
+    searchParams: string;
+  }>;
+};
 
-import {ErrorBoundary} from "react-error-boundary";
+const Page = async ({ searchParams }: Props) => {
+  const params = await workflowParamsLoader(searchParams);
 
-const Page = async () => {
-    await requireAuth()
+  await requireAuth();
 
-    prefetchWorkflows()
+  prefetchWorkflows(params);
 
-    return (
-        <WorkflowContainer>
-            <HydrateClient>
-                <ErrorBoundary fallback={<p>Error!</p>}>
-                    <Suspense fallback={<p>Loading....</p>}>
-                        <WorkflowsList/>
-                    </Suspense>
-                </ErrorBoundary>
-            </HydrateClient>
-        </WorkflowContainer>
-    )
-}
+  return (
+    <WorkflowContainer>
+      <HydrateClient>
+        <ErrorBoundary fallback={<p>Error!</p>}>
+          <Suspense fallback={<p>Loading....</p>}>
+            <WorkflowsList />
+          </Suspense>
+        </ErrorBoundary>
+      </HydrateClient>
+    </WorkflowContainer>
+  );
+};
 
-export default Page
+export default Page;
