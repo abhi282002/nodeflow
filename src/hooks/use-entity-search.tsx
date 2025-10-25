@@ -12,7 +12,7 @@ export function useEntitySearch<T extends { search: string; page: number }>({
   setParams,
   debounceMs = 500,
 }: UseEntitySearchProps<T>) {
-  const [localSearch, setLocalSearch] = useState('');
+  const [localSearch, setLocalSearch] = useState(params.search);
 
   useEffect(() => {
     if (localSearch === '' && params.search !== '') {
@@ -35,7 +35,7 @@ export function useEntitySearch<T extends { search: string; page: number }>({
     }, debounceMs);
 
     return () => clearTimeout(timer);
-  }, [localSearch, params, setParams, debounceMs]);
+  }, [localSearch, setParams, debounceMs]);
 
   useEffect(() => {
     setLocalSearch(params.search);
