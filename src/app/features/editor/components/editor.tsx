@@ -17,6 +17,7 @@ import {
   Panel,
 } from '@xyflow/react';
 
+
 import { ErrorView, LoadingView } from '@/components/entity-views';
 import { useSuspenseWorkflow } from '../../workflows/hooks/use-workflows';
 

@@ -88,11 +88,12 @@ model Workflow {
 
 enum NodeType {
   INITIAL
+  MANUAL_TRIGGER
+  HTTP_REQUEST
 }
 
 
 model Node {
-
 
   id String @id @default(cuid())
 
@@ -100,11 +101,10 @@ model Node {
 
   workflow   Workflow  @relation(fields:[workflowId],references:[id],onDelete: Cascade)
 
-
   name String
 
   type NodeType
-
+  
   position Json
 
   data Json @default("{}")
@@ -116,12 +116,6 @@ model Node {
 
    createdAt DateTime @default(now())
    updatedAt DateTime @updatedAt
-
-
-
-
-
-
 }
 
 
