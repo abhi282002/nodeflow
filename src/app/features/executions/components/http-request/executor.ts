@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import type { NodeExecutor } from '@/app/features/executions/types';
 import { NonRetriableError } from 'inngest';
 import axios, { AxiosRequestConfig } from 'axios';
+import { httpRequestChannel } from '@/inngest/inngest/http-request';
 
 Handlebars.registerHelper('json', (context) => {
   const jsonString = JSON.stringify(context, null, 2);
@@ -16,60 +17,96 @@ type HttpRequestData = {
   body?: string;
 };
 
-
-
 export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
   data,
   nodeId,
   context,
   step,
+  publish,
 }) => {
   //TODO:publish loading state
+
+  await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: 'loading',
+    }),
+  );
+
   if (!data.endpoint) {
+    await publish(
+      httpRequestChannel().status({
+        nodeId,
+        status: 'error',
+      }),
+    );
     throw new NonRetriableError('HTTP Request node: No endpoint configured');
   }
 
   if (!data.variableName) {
+    await publish(
+      httpRequestChannel().status({
+        nodeId,
+        status: 'error',
+      }),
+    );
     throw new NonRetriableError(
       'HTTP Request node: No variable name configured',
     );
   }
 
-  const results = await step.run('http-request', async () => {
-    const endpoint = Handlebars.compile(data.endpoint)(context);
+  try {
+    const results = await step.run('http-request', async () => {
+      const endpoint = Handlebars.compile(data.endpoint)(context);
 
-    const method = data.method || 'GET';
+      const method = data.method || 'GET';
 
-    const options: AxiosRequestConfig = { method };
-    if (['POST', 'PUT', 'PATCH'].includes(method)) {
-      if (data.body) {
-        const resolved = Handlebars.compile(data.body)(context);
-        JSON.parse(resolved);
-        options.data = data.body;
-        options.headers = {
-          'Content-Type': 'application/json',
-        };
+      const options: AxiosRequestConfig = { method };
+      if (['POST', 'PUT', 'PATCH'].includes(method)) {
+        if (data.body) {
+          const resolved = Handlebars.compile(data.body)(context);
+          JSON.parse(resolved);
+          options.data = data.body;
+          options.headers = {
+            'Content-Type': 'application/json',
+          };
+        }
       }
-    }
 
-    const response = await axios.request({
-      url: endpoint,
-      ...options,
+      const response = await axios.request({
+        url: endpoint,
+        ...options,
+      });
+
+      const responsePayload = {
+        httpResponse: {
+          status: response.status,
+          statusText: response.statusText,
+          data: response.data,
+        },
+      };
+
+      return {
+        ...context,
+        [data.variableName]: responsePayload,
+      };
     });
 
-    const responsePayload = {
-      httpResponse: {
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data,
-      },
-    };
+    await publish(
+      httpRequestChannel().status({
+        nodeId,
+        status: 'success',
+      }),
+    );
 
-    return {
-      ...context,
-      [data.variableName]: responsePayload,
-    };
-  });
-
-  return results;
+    return results;
+  } catch (error) {
+    await publish(
+      httpRequestChannel().status({
+        nodeId,
+        status: 'error',
+      }),
+    );
+    throw error;
+  }
 };
