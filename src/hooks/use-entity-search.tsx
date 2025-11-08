@@ -7,6 +7,7 @@ interface UseEntitySearchProps<T extends { search: string; page: number }> {
   debounceMs?: number;
 }
 
+
 export function useEntitySearch<T extends { search: string; page: number }>({
   params,
   setParams,

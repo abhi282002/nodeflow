@@ -10,14 +10,23 @@ import { requireAuth } from '@/lib/auth-utils';
 import { HydrateClient } from '@/trpc/server';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+
+
+
 interface PageProps {
   params: Promise<{
     workflowId: string;
   }>;
 }
 
+
+
+
+
+
 const Page = async ({ params }: PageProps) => {
   await requireAuth();
+
   const { workflowId } = await params;
 
   prefetchWorkflow(workflowId);

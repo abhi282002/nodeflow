@@ -78,6 +78,7 @@ function SidebarProvider({
       const openState = typeof value === "function" ? value(open) : value
       if (setOpenProp) {
         setOpenProp(openState)
+
       } else {
         _setOpen(openState)
       }

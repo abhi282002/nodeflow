@@ -104,7 +104,7 @@ model Node {
   name String
 
   type NodeType
-  
+
   position Json
 
   data Json @default("{}")
@@ -149,4 +149,3 @@ model Connection {
 
    @@unique([fromNodeId,toNodeId,fromOutput,toInput])
 }
-
