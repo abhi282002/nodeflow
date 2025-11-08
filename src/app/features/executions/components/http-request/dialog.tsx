@@ -34,6 +34,15 @@ import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
 const formSchema = z.object({
+  variableName: z
+    .string()
+    .min(1, {
+      message: 'Variable name is required',
+    })
+    .regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/, {
+      message:
+        'Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores',
+    }),
   endpoint: z.url({
     message: 'Please enter a valid URL',
   }),
@@ -61,12 +70,14 @@ export const HttpRequestDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      variableName: defaultValues.variableName || '',
       endpoint: defaultValues.endpoint || '',
       method: defaultValues.method || 'GET',
       body: defaultValues.body || '',
     },
   });
 
+  const watchVariableName = form.watch('variableName') || 'myApiCall';
   const watchMethod = form.watch('method');
 
   const showBodyField = ['POST', 'PUT', 'PATCH'].includes(watchMethod);
@@ -79,6 +90,7 @@ export const HttpRequestDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
+        variableName: defaultValues.variableName || '',
         endpoint: defaultValues.endpoint || '',
         method: defaultValues.method || 'GET',
         body: defaultValues.body || '',
@@ -100,6 +112,24 @@ export const HttpRequestDialog = ({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8 mt-4"
           >
+            <FormField
+              control={form.control}
+              name="variableName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Variable Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="myApiCall" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Use this name to references the result in other nodes :
+                    {`{{${watchVariableName}.httpResponse.data}}`}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="method"
