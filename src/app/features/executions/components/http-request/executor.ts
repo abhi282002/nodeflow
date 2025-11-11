@@ -33,6 +33,8 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
     }),
   );
 
+  console.log(data.endpoint);
+
   if (!data.endpoint) {
     await publish(
       httpRequestChannel().status({

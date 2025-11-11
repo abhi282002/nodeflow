@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from './ui/sheet';
 
+
 import { NodeType } from '@/generated/prisma';
 import { Separator } from './ui/separator';
 
@@ -35,6 +36,12 @@ const triggerNodes: NodeTypeOption[] = [
     description:
       'Runs the flow on clicking a button, Good for getting started quickly',
     icon: MousePointerIcon,
+  },
+  {
+    type: NodeType.GOOGLE_FORM_TRIGGER,
+    label: 'Google Form',
+    description: 'Runs the flow when a Google Form is submitted',
+    icon: '/logos/googleform.svg',
   },
 ];
 
@@ -58,6 +65,7 @@ export function NodeSelector({
   onOpenChange,
   children,
 }: NodeSelectorProps) {
+
   const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
 
   const handleNodeSelect = useCallback(
@@ -85,6 +93,7 @@ export function NodeSelector({
           x: centerX + (Math.random() - 0.5) * 200,
           y: centerY + (Math.random() - 0.5) * 200,
         });
+
 
         const newNode = {
           id: createId(),

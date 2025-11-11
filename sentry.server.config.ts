@@ -2,17 +2,17 @@
 // The config you add here will be used whenever the server handles a request.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
-  dsn: "https://d37c1bad6cacfa0da123688058dbdf56@o4510238861426688.ingest.de.sentry.io/4510238880038992",
+  dsn: 'https://d37c1bad6cacfa0da123688058dbdf56@o4510238861426688.ingest.de.sentry.io/4510238880038992',
 
-    integrations: [
-        Sentry.vercelAIIntegration({
-            recordInputs:true,
-            recordOutputs:true,
-        })
-    ],
+  integrations: [
+    Sentry.vercelAIIntegration({
+      recordInputs: true,
+      recordOutputs: true,
+    }),
+  ],
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
 

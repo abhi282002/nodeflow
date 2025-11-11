@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "biome check",
+    "ngrok:dev": "dotenv ngrok http --url=$NGROK_URL 3000",
     "format": "biome format --write"
   },
   "dependencies": {
@@ -16,7 +17,7 @@
     "@paralleldrive/cuid2": "^3.1.0",
     "@polar-sh/better-auth": "^1.1.11",
     "@polar-sh/sdk": "^0.38.1",
-    "@prisma/client": "^6.17.1",
+    "@prisma/client": "^6.19.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -89,6 +90,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/toposort": "^2.0.7",
+    "dotenv-cli": "^11.0.0",
     "prisma": "^6.17.1",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
