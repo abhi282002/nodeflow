@@ -18,7 +18,6 @@ import {
   SheetTrigger,
 } from './ui/sheet';
 
-
 import { NodeType } from '@/generated/prisma';
 import { Separator } from './ui/separator';
 
@@ -43,6 +42,12 @@ const triggerNodes: NodeTypeOption[] = [
     description: 'Runs the flow when a Google Form is submitted',
     icon: '/logos/googleform.svg',
   },
+  {
+    type: NodeType.STRIPE_TRIGGER,
+    label: 'Stripe Event',
+    description: 'Runs the flow when a Stripe Event is captured',
+    icon: '/logos/stripe.svg',
+  },
 ];
 
 const executionNodes: NodeTypeOption[] = [
@@ -65,7 +70,6 @@ export function NodeSelector({
   onOpenChange,
   children,
 }: NodeSelectorProps) {
-
   const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
 
   const handleNodeSelect = useCallback(
@@ -93,7 +97,6 @@ export function NodeSelector({
           x: centerX + (Math.random() - 0.5) * 200,
           y: centerY + (Math.random() - 0.5) * 200,
         });
-
 
         const newNode = {
           id: createId(),

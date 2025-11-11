@@ -1,21 +1,25 @@
 import type { NodeExecutor } from '@/app/features/executions/types';
 import { googleFormTriggerChannel } from '@/inngest/inngest/channels/google-form-trigger';
+import { stripeTriggerChannel } from '@/inngest/inngest/channels/stripe-trigger';
 
-type googleFormTriggerData = Record<string, unknown>;
+type stripeTriggerData = Record<string, unknown>;
 
-export const googleFomrTriggerExecutor: NodeExecutor<
-  googleFormTriggerData
-> = async ({ nodeId, context, step, publish }) => {
+export const stripeTriggerExecutor: NodeExecutor<stripeTriggerData> = async ({
+  nodeId,
+  context,
+  step,
+  publish,
+}) => {
   //TODO:publish loading state
 
   await publish(
-    googleFormTriggerChannel().status({
+    stripeTriggerChannel().status({
       nodeId,
       status: 'loading',
     }),
   );
 
-  const result = await step.run('google_form_trigger', async () => context);
+  const result = await step.run('stripe_trigger', async () => context);
 
   await publish(
     googleFormTriggerChannel().status({

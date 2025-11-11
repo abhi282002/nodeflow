@@ -4,7 +4,7 @@ import { getSubscriptionToken, type Realtime } from '@inngest/realtime';
 
 import { inngest } from '@/inngest/client';
 
-import { googleFormTriggerChannel } from '@/inngest/inngest/google-form-trigger';
+import { googleFormTriggerChannel } from '@/inngest/inngest/channels/google-form-trigger';
 
 export type GoogleFormTriggerToken = Realtime.Token<
   typeof googleFormTriggerChannel,

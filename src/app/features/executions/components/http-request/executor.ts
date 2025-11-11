@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import type { NodeExecutor } from '@/app/features/executions/types';
 import { NonRetriableError } from 'inngest';
 import axios, { AxiosRequestConfig } from 'axios';
-import { httpRequestChannel } from '@/inngest/inngest/http-request';
+import { httpRequestChannel } from '@/inngest/inngest/channels/http-request';
 
 Handlebars.registerHelper('json', (context) => {
   const jsonString = JSON.stringify(context, null, 2);
@@ -11,8 +11,8 @@ Handlebars.registerHelper('json', (context) => {
 });
 
 type HttpRequestData = {
-  variableName: string;
-  endpoint: string;
+  variableName?: string;
+  endpoint?: string;
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: string;
 };
@@ -35,30 +35,32 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
 
   console.log(data.endpoint);
 
-  if (!data.endpoint) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: 'error',
-      }),
-    );
-    throw new NonRetriableError('HTTP Request node: No endpoint configured');
-  }
-
-  if (!data.variableName) {
-    await publish(
-      httpRequestChannel().status({
-        nodeId,
-        status: 'error',
-      }),
-    );
-    throw new NonRetriableError(
-      'HTTP Request node: No variable name configured',
-    );
-  }
-
   try {
     const results = await step.run('http-request', async () => {
+      if (!data.endpoint) {
+        await publish(
+          httpRequestChannel().status({
+            nodeId,
+            status: 'error',
+          }),
+        );
+        throw new NonRetriableError(
+          'HTTP Request node: No endpoint configured',
+        );
+      }
+
+      if (!data.variableName) {
+        await publish(
+          httpRequestChannel().status({
+            nodeId,
+            status: 'error',
+          }),
+        );
+        throw new NonRetriableError(
+          'HTTP Request node: No variable name configured',
+        );
+      }
+
       const endpoint = Handlebars.compile(data.endpoint)(context);
 
       const method = data.method || 'GET';

@@ -3,12 +3,14 @@ import { NodeExecutor } from '../../types';
 import { manualTriggerExecutor } from '@/app/features/triggers/components/manual-trigger/executor';
 import { httpRequestExecutor } from '../http-request/executor';
 import { googleFomrTriggerExecutor } from '@/app/features/triggers/components/google-form-trigger/executor';
+import { stripeTriggerExecutor } from '@/app/features/triggers/components/stripe-trigger/executor';
 
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.MANUAL_TRIGGER]: manualTriggerExecutor,
   [NodeType.INITIAL]: manualTriggerExecutor,
   [NodeType.HTTP_REQUEST]: httpRequestExecutor,
   [NodeType.GOOGLE_FORM_TRIGGER]: googleFomrTriggerExecutor,
+  [NodeType.STRIPE_TRIGGER]: stripeTriggerExecutor,
 };
 
 export const getExecutor = (type: NodeType): NodeExecutor => {

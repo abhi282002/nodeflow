@@ -4,9 +4,10 @@ import prisma from '@/lib/db';
 import { topologicalSort } from './utils';
 import { NodeType } from '@/generated/prisma';
 import { getExecutor } from '@/app/features/executions/components/lib/executor-registry';
-import { httpRequestChannel } from './inngest/http-request';
-import { manualTriggerChannel } from './inngest/manual-trigger';
-import { googleFormTriggerChannel } from './inngest/google-form-trigger';
+import { httpRequestChannel } from './inngest/channels/http-request';
+import { manualTriggerChannel } from './inngest/channels/manual-trigger';
+import { googleFormTriggerChannel } from './inngest/channels/google-form-trigger';
+import { stripeTriggerChannel } from './inngest/channels/stripe-trigger';
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -19,6 +20,7 @@ export const executeWorkflow = inngest.createFunction(
       httpRequestChannel(),
       manualTriggerChannel(),
       googleFormTriggerChannel(),
+      stripeTriggerChannel(),
     ],
   },
   async ({ event, step, publish }) => {
