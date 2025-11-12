@@ -3,7 +3,7 @@
 import { getSubscriptionToken, type Realtime } from '@inngest/realtime';
 
 import { inngest } from '@/inngest/client';
-import { httpRequestChannel } from '@/inngest/inngest/channels/http-request';
+import { httpRequestChannel } from '@/inngest/channels/http-request';
 
 export type HttpRequestToken = Realtime.Token<
   typeof httpRequestChannel,

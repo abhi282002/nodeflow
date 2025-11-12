@@ -4,8 +4,8 @@ import { BaseTriggerNode } from '../base-trigger-node';
 import { MousePointerIcon } from 'lucide-react';
 import { GoogleFormTriggerDialog } from './dialog';
 import { useNodeStatus } from '@/app/features/executions/hooks/use-node-status';
-import { MANUAL_TRIGGER_CHANNEL_NAME } from '@/inngest/inngest/channels/manual-trigger';
-import { GOOGLE_FORM_TRIGGER_CHANNEL_NAME } from '@/inngest/inngest/channels/google-form-trigger';
+import { MANUAL_TRIGGER_CHANNEL_NAME } from '@/inngest/channels/manual-trigger';
+import { GOOGLE_FORM_TRIGGER_CHANNEL_NAME } from '@/inngest/channels/google-form-trigger';
 import { fetchGoogleFormTriggerRealtimeToken } from './actions';
 
 export const GoogleFormTrigger = memo((props: NodeProps) => {

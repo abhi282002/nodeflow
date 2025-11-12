@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import type { NodeExecutor } from '@/app/features/executions/types';
 import { NonRetriableError } from 'inngest';
 import axios, { AxiosRequestConfig } from 'axios';
-import { httpRequestChannel } from '@/inngest/inngest/channels/http-request';
+import { httpRequestChannel } from '@/inngest/channels/http-request';
 
 Handlebars.registerHelper('json', (context) => {
   const jsonString = JSON.stringify(context, null, 2);

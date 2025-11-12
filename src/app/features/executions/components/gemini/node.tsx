@@ -1,39 +1,47 @@
 'use client';
 
 import { Node, NodeProps, useReactFlow } from '@xyflow/react';
-import { GlobeIcon } from 'lucide-react';
 import { memo, useState } from 'react';
 import { BaseExecutionNode } from '../base-execution-node';
-import { HttpRequestFormValues, HttpRequestDialog } from './dialog';
+import { AVAILABLE_MODELS, GeminiDialog, GeminiFormValues } from './dialog';
 import { useNodeStatus } from '../../hooks/use-node-status';
-import { HTTP_REQUEST_CHANNEL_NAME } from '@/inngest/channels/http-request';
-import { fetchHttpRequestRealtimeToken } from './actions';
+import { fetchGeminiRealtimeToken } from './actions';
+import { GEMINI_CHANNEL_NAME } from '@/inngest/channels/gemini';
 
-type HttpRequestNodeData = {
+type GeminiNodeData = {
   variableName?: string;
-  endpoint?: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  body?: string;
+  model?:
+    | 'gemini-1.5-flash'
+    | 'gemini-1.5-flash-8b'
+    | 'gemini-1.5-pro'
+    | 'gemini-1.0-pro'
+    | 'gemini-pro'
+    | undefined;
+  systemPrompt?: string;
+  userPrompt?: string;
 };
 
-type HttpRequestNodeType = Node<HttpRequestNodeData>;
+type GeminiNodeType = Node<GeminiNodeData>;
 
-export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
+export const GeminiNode = memo((props: NodeProps<GeminiNodeType>) => {
   const { setNodes } = useReactFlow();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const nodeData = props.data as HttpRequestNodeData;
-  const description = nodeData?.endpoint
-    ? `${nodeData.method || 'GET'}:${nodeData.endpoint}`
-    : 'Not configured';
+  const nodeData = props.data as GeminiNodeData;
+  const description = nodeData?.userPrompt
+    ? `${nodeData.model || AVAILABLE_MODELS[0]} : ${nodeData.userPrompt.slice(
+        0,
+        50,
+      )}...`
+    : 'Not Configured';
 
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
-    channel: HTTP_REQUEST_CHANNEL_NAME,
+    channel: GEMINI_CHANNEL_NAME,
     topic: 'status',
-    refreshToken: fetchHttpRequestRealtimeToken,
+    refreshToken: fetchGeminiRealtimeToken,
   });
 
-  const handleSubmit = (values: HttpRequestFormValues) => {
+  const handleSubmit = (values: GeminiFormValues) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === props.id) {
@@ -54,7 +62,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
 
   return (
     <>
-      <HttpRequestDialog
+      <GeminiDialog
         defaultValues={nodeData}
         onSubmit={handleSubmit}
         open={dialogOpen}
@@ -64,8 +72,8 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
         {...props}
         id={props.id}
         status={nodeStatus}
-        icon={GlobeIcon}
-        name="HTTP Request"
+        icon={'/logos/gemini.svg'}
+        name="Gemini"
         description={description}
         onSettings={handleOpenSettings}
         onDoubleClick={handleOpenSettings}
@@ -74,4 +82,4 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   );
 });
 
-HttpRequestNode.displayName = 'HttpRequestNode';
+GeminiNode.displayName = 'GeminiNode';

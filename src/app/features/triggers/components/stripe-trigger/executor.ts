@@ -1,6 +1,6 @@
 import type { NodeExecutor } from '@/app/features/executions/types';
-import { googleFormTriggerChannel } from '@/inngest/inngest/channels/google-form-trigger';
-import { stripeTriggerChannel } from '@/inngest/inngest/channels/stripe-trigger';
+import { googleFormTriggerChannel } from '@/inngest/channels/google-form-trigger';
+import { stripeTriggerChannel } from '@/inngest/channels/stripe-trigger';
 
 type stripeTriggerData = Record<string, unknown>;
 
