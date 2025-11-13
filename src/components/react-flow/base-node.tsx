@@ -39,6 +39,7 @@ export const BaseNode = forwardRef<HTMLDivElement, BaseNodeProps>(
     </div>
   ),
 );
+
 BaseNode.displayName = 'BaseNode';
 
 /**

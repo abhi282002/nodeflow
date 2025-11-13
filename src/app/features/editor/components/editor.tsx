@@ -38,6 +38,7 @@ export const EditorError = () => {
 };
 
 export const Editor = ({ workflowId }: { workflowId: string }) => {
+  
   const setEditor = useSetAtom(editorAtom);
 
   const { data: workflow } = useSuspenseWorkflow(workflowId);

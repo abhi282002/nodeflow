@@ -24,7 +24,10 @@ import { useAtomValue } from 'jotai';
 import { editorAtom } from '../store/atoms';
 
 export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
+
+
   const editor = useAtomValue(editorAtom);
+
 
   const saveWorkflow = useUpdateWorkflow();
 
@@ -127,6 +130,8 @@ export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
     </BreadcrumbItem>
   );
 };
+
+
 
 export const EditorBreadCrumbs = ({ workflowId }: { workflowId: string }) => {
   return (

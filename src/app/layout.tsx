@@ -38,7 +38,6 @@ export default function RootLayout({
           <NuqsAdapter>
             <Provider>
               {children}
-
               <Toaster />
             </Provider>
           </NuqsAdapter>

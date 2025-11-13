@@ -8,6 +8,7 @@ import { useNodeStatus } from '../../hooks/use-node-status';
 import { fetchGeminiRealtimeToken } from './actions';
 import { GEMINI_CHANNEL_NAME } from '@/inngest/channels/gemini';
 
+
 type GeminiNodeData = {
   variableName?: string;
   credentialId?: string;
@@ -22,7 +23,10 @@ type GeminiNodeData = {
   userPrompt?: string;
 };
 
+
 type GeminiNodeType = Node<GeminiNodeData>;
+
+
 
 export const GeminiNode = memo((props: NodeProps<GeminiNodeType>) => {
   const { setNodes } = useReactFlow();
