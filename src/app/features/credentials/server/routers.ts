@@ -1,14 +1,16 @@
 import { PAGINATION } from '@/config/constants';
 import { CredentialType, NodeType } from '@/generated/prisma';
-import type { Node, Edge } from '@xyflow/react';
+
 import prisma from '@/lib/db';
 import {
   createTRPCRouter,
   premiumProcedure,
   protectedProcedure,
 } from '@/trpc/init';
-import { generateSlug } from 'random-word-slugs';
+
 import { z } from 'zod';
+
+import { encrypt } from '@/lib/encryption';
 export const credentialsRouter = createTRPCRouter({
   create: premiumProcedure
     .input(
@@ -24,7 +26,7 @@ export const credentialsRouter = createTRPCRouter({
       return prisma.credential.create({
         data: {
           name,
-          value, // TODO Encrypt in production
+          value: encrypt(value),
           type,
           userId: ctx.auth.user.id,
         },
@@ -62,7 +64,7 @@ export const credentialsRouter = createTRPCRouter({
         data: {
           name: input.name,
           type: input.type,
-          value: input.value,
+          value: encrypt(input.value),
         },
       });
     }),
