@@ -145,8 +145,6 @@ export const EntityPagination = ({
   onPageChange,
   disabled,
 }: EntityPaginationProps) => {
-  console.log(totalPages);
-
   return (
     <div className="flex items-center justify-between gap-x-2">
       <div className="flex-1 text-sm text-muted-foreground">

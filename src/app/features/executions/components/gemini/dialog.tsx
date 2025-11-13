@@ -32,8 +32,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
+import { useCredentialsByType } from '@/app/features/credentials/hooks/use-credentials';
+import { CredentialType } from '@/generated/prisma';
+import Image from 'next/image';
 
 export const AVAILABLE_MODELS = [
+  'gemini-2.0-flash',
   'gemini-1.5-flash',
   'gemini-1.5-flash-8b',
   'gemini-1.5-pro',
@@ -52,6 +56,8 @@ const formSchema = z.object({
         'Variable name must start with a letter or underscore and can only contain letters, numbers, and underscores',
     }),
   model: z.enum(AVAILABLE_MODELS),
+
+  credentialId: z.string().min(1, 'Credential is required'),
 
   systemPrompt: z.string().optional(),
 
@@ -73,10 +79,14 @@ export const GeminiDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
+  const { data: credentials, isLoading: isLoadingCredentials } =
+    useCredentialsByType(CredentialType.GEMINI);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || '',
+      credentialId: defaultValues.credentialId || '',
       model: defaultValues.model || AVAILABLE_MODELS[0],
       systemPrompt: defaultValues.systemPrompt || '',
       userPrompt: defaultValues.userPrompt || '',
@@ -94,7 +104,7 @@ export const GeminiDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || '',
-
+        credentialId: defaultValues.credentialId || '',
         model: defaultValues.model || AVAILABLE_MODELS[0],
         systemPrompt: defaultValues.systemPrompt || '',
         userPrompt: defaultValues.userPrompt || '',
@@ -104,7 +114,7 @@ export const GeminiDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[570px] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Gemini Configuration</DialogTitle>
           <DialogDescription>
@@ -114,7 +124,7 @@ export const GeminiDialog = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-8 mt-4"
+            className="space-y-8 mt-2"
           >
             <FormField
               control={form.control}
@@ -133,6 +143,45 @@ export const GeminiDialog = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="credentialId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gemini Credential</FormLabel>
+
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoadingCredentials || !credentials?.length}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a Credential" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {credentials?.map((option) => (
+                        <SelectItem key={option.id} value={option.id}>
+                          <div className="flex items-center gap-2">
+                            <Image
+                              src={'/logos/gemini.svg'}
+                              alt={option.name}
+                              width={16}
+                              height={26}
+                            />
+                            {option.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="model"
