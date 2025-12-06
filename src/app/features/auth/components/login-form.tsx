@@ -12,7 +12,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -26,7 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { cn } from '@/lib/utils';
+
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth-client';
 

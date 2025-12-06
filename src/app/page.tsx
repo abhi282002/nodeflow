@@ -1,11 +1,12 @@
 'use client';
-import { useTRPC } from '@/trpc/client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { requireUnAuth } from '@/lib/auth-utils';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Page = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/workflows');
+  }, []);
   return <></>;
 };
 
