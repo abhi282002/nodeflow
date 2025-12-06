@@ -1,6 +1,6 @@
 'use client';
 
-import { formatDistance, formatDistanceToNow } from 'date-fns';
+import {  formatDistanceToNow } from 'date-fns';
 
 import {
   EmptyView,
@@ -16,7 +16,7 @@ import {
 import { useCredentialsParams } from '../hooks/use-credentials-params';
 import { useEntitySearch } from '@/hooks/use-entity-search';
 import { useRouter } from 'next/navigation';
-import { useUpgradeModel } from '@/hooks/use-upgrade-model';
+
 import {
   useCreateCredential,
   useRemoveCredential,

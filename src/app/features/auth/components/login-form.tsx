@@ -1,12 +1,12 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 
 import {
   Card,
@@ -15,7 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 import {
   Form,
@@ -24,15 +24,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { authClient } from '@/lib/auth-client';
 
 const loginSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.email('Please enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -43,26 +43,58 @@ export function LoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
+
+  const signInWithGithub = async () => {
+    await authClient.signIn.social(
+      {
+        provider: 'github',
+      },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
+  };
+
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social(
+      {
+        provider: 'google',
+      },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
+  };
 
   const onSubmit = async (value: LoginFormValues) => {
     await authClient.signIn.email(
       {
         email: value.email,
         password: value.password,
-        callbackURL: "/",
+        callbackURL: '/',
       },
       {
         onSuccess: () => {
-          router.push("/");
+          router.push('/');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
   };
 
@@ -82,20 +114,32 @@ export function LoginForm() {
                 <div className="flex flex-col gap-4">
                   <Button
                     type="button"
-                    variant={"outline"}
+                    variant={'outline'}
                     className="w-full"
+                    onClick={signInWithGithub}
                     disabled={isPending}
                   >
-                      <Image src={"logos/github.svg"} alt={"Github Logo"} width={20} height={20} />
+                    <Image
+                      src={'logos/github.svg'}
+                      alt={'Github Logo'}
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
                   <Button
                     type="button"
-                    variant={"outline"}
+                    variant={'outline'}
                     className="w-full"
+                    onClick={signInWithGoogle}
                     disabled={isPending}
                   >
-                      <Image src={"logos/google.svg"} alt={"Google Logo"} width={20} height={20} />
+                    <Image
+                      src={'logos/google.svg'}
+                      alt={'Google Logo'}
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -109,7 +153,7 @@ export function LoginForm() {
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="r@example.com"
+                            placeholder="abhi123@example.com"
                             {...field}
                           />
                         </FormControl>
@@ -139,9 +183,9 @@ export function LoginForm() {
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don't have an account?{" "}
+                  Don't have an account?{' '}
                   <Link
-                    href={"/signup"}
+                    href={'/signup'}
                     className="underline underline-offset-4"
                   >
                     Sign up

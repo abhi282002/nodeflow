@@ -1,12 +1,12 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
 
 import {
   Card,
@@ -15,7 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 import {
   Form,
@@ -24,23 +24,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
-
-
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { authClient } from '@/lib/auth-client';
 
 const RegisterSchema = z
   .object({
-    email: z.email("Please enter a valid email address"),
-    password: z.string().min(1, "Password is required"),
+    email: z.email('Please enter a valid email address'),
+    password: z.string().min(1, 'Password is required'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
   });
 
 type RegisterFormValue = z.infer<typeof RegisterSchema>;
@@ -51,11 +49,43 @@ export function RegisterForm() {
   const form = useForm<RegisterFormValue>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
+
+  const signInWithGithub = async () => {
+    await authClient.signIn.social(
+      {
+        provider: 'github',
+      },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
+  };
+
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social(
+      {
+        provider: 'google',
+      },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
+  };
 
   const onSubmit = async (values: RegisterFormValue) => {
     await authClient.signUp.email(
@@ -63,16 +93,16 @@ export function RegisterForm() {
         name: values.email,
         email: values.email,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: '/',
       },
       {
         onSuccess: () => {
-          router.push("/");
+          router.push('/');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
   };
 
@@ -92,20 +122,32 @@ export function RegisterForm() {
                 <div className="flex flex-col gap-4">
                   <Button
                     type="button"
-                    variant={"outline"}
+                    variant={'outline'}
                     className="w-full"
                     disabled={isPending}
+                    onClick={signInWithGithub}
                   >
-                      <Image src={"logos/github.svg"} alt={"Github Logo"} width={20} height={20} />
+                    <Image
+                      src={'logos/github.svg'}
+                      alt={'Github Logo'}
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
                   <Button
                     type="button"
-                    variant={"outline"}
+                    variant={'outline'}
                     className="w-full"
                     disabled={isPending}
+                    onClick={signInWithGoogle}
                   >
-                      <Image src={"logos/google.svg"} alt={"Google Logo"} width={20} height={20} />
+                    <Image
+                      src={'logos/google.svg'}
+                      alt={'Google Logo'}
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -166,9 +208,9 @@ export function RegisterForm() {
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Already have an account?{" "}
+                  Already have an account?{' '}
                   <Link
-                    href={"/login"}
+                    href={'/login'}
                     className="underline underline-offset-4"
                   >
                     Login
