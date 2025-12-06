@@ -54,7 +54,7 @@ export function LoginForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
@@ -70,7 +70,7 @@ export function LoginForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
@@ -88,7 +88,7 @@ export function LoginForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);

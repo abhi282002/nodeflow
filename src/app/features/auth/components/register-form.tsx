@@ -62,7 +62,7 @@ export function RegisterForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
@@ -78,7 +78,7 @@ export function RegisterForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
@@ -97,7 +97,7 @@ export function RegisterForm() {
       },
       {
         onSuccess: () => {
-          router.push('/');
+          router.push('/workflows');
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
