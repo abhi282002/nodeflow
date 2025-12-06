@@ -32,7 +32,7 @@ export function UpgradeModel({open, onOpenChange}: UpgradeModelProps) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={() => authClient.checkout({
-                        slug: "nodebase pro"
+                        slug: "Nodeflow pro"
                     })}>
                         Upgrade Now
                     </AlertDialogAction>

@@ -24,7 +24,7 @@ export default withSentryConfig(nextConfig, {
 
     org: "abhishekdev",
 
-    project: "nodebase",
+    project: "nodeflow",
 
     // Only print logs for uploading source maps in CI
     silent: !process.env.CI,

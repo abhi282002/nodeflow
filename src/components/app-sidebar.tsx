@@ -62,11 +62,11 @@ export const AppSidebar = () => {
             <Link href={'/workflows'} prefetch>
               <Image
                 src={'/logos/logo.svg'}
-                alt={'Nodebase'}
+                alt={'Nodeflow'}
                 width={30}
                 height={30}
               />
-              <span className={'font-semibold text-sm'}>Nodebase</span>
+              <span className={'font-semibold text-sm'}>Nodeflow</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -107,7 +107,7 @@ export const AppSidebar = () => {
               <SidebarMenuButton
                 onClick={() =>
                   authClient.checkout({
-                    slug: 'nodebase pro',
+                    slug: 'Nodeflow pro',
                   })
                 }
                 className={'gap-x-4 h-10 px-4'}
