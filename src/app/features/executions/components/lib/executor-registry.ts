@@ -15,7 +15,9 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
   [NodeType.GOOGLE_FORM_TRIGGER]: googleFomrTriggerExecutor,
   [NodeType.STRIPE_TRIGGER]: stripeTriggerExecutor,
   [NodeType.GEMINI]: geminiExecutor,
-  [NodeType.DISCORD]: discordExecutor,  
+  [NodeType.OPENAI]:geminiExecutor,
+  [NodeType.ANTHROPIC]:geminiExecutor,
+  [NodeType.DISCORD]: discordExecutor,
   [NodeType.SLACK]: slackExecutor,
 };
 
