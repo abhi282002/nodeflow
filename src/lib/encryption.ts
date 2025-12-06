@@ -2,10 +2,12 @@ import Cryptr from 'cryptr';
 
 const cryptr = new Cryptr(process.env.ENCRYPTION_KEY!);
 
-export const encrypt = (text: string) => {
-  return cryptr.encrypt(text);
-};
+export const encrypt = (text:string)=>cryptr.encrypt(text);
 
 export const decrypt = (text: string) => {
-  return cryptr.decrypt(text);
+  try {
+    return cryptr.decrypt(text);
+  } catch (error) {
+    return text;
+  }
 };

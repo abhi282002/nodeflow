@@ -93,6 +93,8 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
     });
   });
 
+  console.log("credential",credential);
+
   if (!credential) {
     throw new NonRetriableError('Gemini node: Credential not found');
   }
